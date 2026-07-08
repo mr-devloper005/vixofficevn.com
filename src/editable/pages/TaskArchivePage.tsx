@@ -8,7 +8,11 @@ import type { SiteFeedPagination, SitePost } from '@/lib/site-connector'
 import { taskPageMetadata } from '@/config/site.content'
 import { taskPageVoices } from '@/editable/content/task-pages.content'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
+import { EditableReveal } from '@/editable/shell/EditableReveal'
 import { getTaskTheme, taskThemeStyle } from '@/editable/theme/task-themes'
+import { Ads, getSlotSizes } from '@/lib/ads'
+
+const pickRandom = (sizes: string[]) => sizes[Math.floor(Math.random() * sizes.length)]
 
 export const revalidate = 3
 
@@ -133,16 +137,26 @@ export function TaskArchiveView({ task, posts, pagination, category, basePath }:
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--tk-muted)]" />
                 </div>
-                <button className="inline-flex h-11 items-center rounded-full bg-[var(--tk-accent)] px-5 text-sm font-semibold text-[var(--tk-on-accent)] transition hover:opacity-90">Apply</button>
+                <button className="inline-flex h-11 items-center rounded-full bg-[var(--tk-fill)] px-6 text-sm font-semibold text-[var(--tk-on-fill)] transition hover:brightness-[1.04]">Apply</button>
               </form>
             </div>
           </div>
         </header>
 
-        <section className="mx-auto max-w-[var(--editable-container)] px-6 py-16 sm:py-20 lg:px-8">
+        {task === 'pdf' ? (
+          <div className="mx-auto max-w-[var(--editable-container)] px-5 pt-10 sm:px-8">
+            <Ads slot="header" size={pickRandom(getSlotSizes('header'))} showLabel className="mx-auto w-full" />
+          </div>
+        ) : null}
+
+        <section className="mx-auto max-w-[var(--editable-container)] px-5 py-16 sm:px-8 sm:py-20">
           {posts.length ? (
             <div className={taskGrid[task]}>
-              {posts.map((post, index) => <ArchivePostCard key={post.id || post.slug} post={post} task={task} basePath={basePath} index={index} />)}
+              {posts.map((post, index) => (
+                <EditableReveal key={post.id || post.slug} index={index}>
+                  <ArchivePostCard post={post} task={task} basePath={basePath} index={index} />
+                </EditableReveal>
+              ))}
             </div>
           ) : (
             <div className="mx-auto max-w-xl rounded-[var(--tk-radius)] border border-dashed border-[var(--tk-line)] bg-[var(--tk-surface)] px-8 py-16 text-center">
@@ -321,17 +335,23 @@ function BookmarkArchiveCard({ post, href, index }: { post: SitePost; href: stri
 }
 
 function PdfArchiveCard({ post, href }: { post: SitePost; href: string }) {
-  const category = getCategory(post, 'Document')
+  const category = getCategory(post, 'Reference')
+  const size = getField(post, ['fileSize', 'size'])
+  const pages = getField(post, ['pages', 'pageCount'])
   return (
-    <Link href={href} className={`${cardBase} flex flex-col p-6 sm:p-7`}>
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--tk-accent-soft)] text-[var(--tk-accent)]"><FileText className="h-6 w-6" /></div>
-        <span className="rounded-full border border-[var(--tk-line)] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--tk-muted)]">{category}</span>
+    <Link href={href} className={`${cardBase} flex flex-col overflow-hidden`}>
+      <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-[linear-gradient(135deg,#eceae0,#e2e6df)]">
+        <FileText className="h-12 w-12 text-[var(--tk-accent)] opacity-70 transition duration-500 group-hover:scale-110" />
+        <span className="absolute left-4 top-4 rounded-full bg-[var(--tk-bg)]/90 px-3 py-1 text-[11px] font-semibold text-[var(--tk-text)]">{category}</span>
       </div>
-      <h2 className="editable-display mt-6 text-xl font-semibold leading-snug tracking-[-0.02em]">{post.title}</h2>
-      <RatingLine post={post} />
-      <p className="mt-3 line-clamp-3 flex-1 text-sm leading-7 text-[var(--tk-muted)]">{getSummary(post)}</p>
-      <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--tk-accent)]">Open document <Download className="h-4 w-4" /></span>
+      <div className="flex flex-1 flex-col p-6">
+        <h2 className="editable-display text-xl font-bold leading-snug tracking-[-0.02em]">{post.title}</h2>
+        <p className="mt-3 line-clamp-3 flex-1 text-sm leading-7 text-[var(--tk-muted)]">{getSummary(post)}</p>
+        <div className="mt-5 flex items-center justify-between border-t border-[var(--tk-line)] pt-4 text-xs font-medium text-[var(--tk-muted)]">
+          <span className="inline-flex items-center gap-1.5"><Download className="h-3.5 w-3.5 text-[var(--tk-accent)]" /> {size || (pages ? `${pages} pages` : 'Preview & download')}</span>
+          <span className="inline-flex items-center gap-1 text-[var(--tk-accent)] transition group-hover:translate-x-0.5">Open <ArrowUpRight className="h-3.5 w-3.5" /></span>
+        </div>
+      </div>
     </Link>
   )
 }
