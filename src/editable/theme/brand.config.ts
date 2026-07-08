@@ -12,8 +12,9 @@ export const slot4BrandConfig = {
   baseUrl: siteIdentity.url,
   productKind,
   ogImage: siteIdentity.ogImage,
+  // Warm editorial accents — amber highlight over cream, deep-teal contrast.
   accents: {
-    primary: '#d32323',
-    surface: '#ffffff',
+    primary: '#e9a65c',
+    surface: '#f5f4ef',
   },
 } as const
