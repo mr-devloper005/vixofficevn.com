@@ -2,13 +2,13 @@ import type { CSSProperties } from 'react'
 import type { TaskKey } from '@/lib/site-config'
 
 /*
-  Yelp-style task surfaces.
+  Task surfaces — ensoro reference (warm editorial).
 
-  Every task (archive + detail) now shares one cohesive premium identity:
-  clean white surfaces, the signature Yelp red accent, hairline gray borders
-  and a single crisp sans-serif — exactly like Yelp. Per-task copy (kicker /
-  note) still varies so each section keeps a little voice, but the visual
-  language is unified. Tokens are delivered via CSS variables (`--tk-*`).
+  Every task (archive + detail) shares ONE cohesive identity: warm cream
+  surfaces, green-black ink, a readable teal accent for eyebrows/icons/links,
+  and a warm-amber fill for primary actions. Per-task copy (kicker / note)
+  still varies so each surface keeps a little voice, but the visual language
+  is unified. Tokens are delivered via CSS variables (`--tk-*`).
 */
 
 export type TaskTheme = {
@@ -28,38 +28,46 @@ export type TaskTheme = {
   accent: string
   accentSoft: string
   onAccent: string
+  /** amber fill for primary actions + on-fill ink */
+  fill: string
+  onFill: string
   glow: string
   radius: string
 }
 
-const YELP_FONT = "'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
+const FONT_DISPLAY = "'Geist', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
+const FONT_BODY = "'Kanit', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif"
 
-// Shared Yelp palette — every task inherits this; only kicker/note differ.
+// Shared warm palette — every task inherits this; only kicker/note differ.
 const base = {
   dark: false,
-  fontDisplay: YELP_FONT,
-  fontBody: YELP_FONT,
-  bg: '#ffffff',
-  surface: '#ffffff',
-  raised: '#f7f7f7',
-  text: '#1a1a1a',
-  muted: '#6b6b6b',
-  line: '#e6e6e6',
-  accent: '#d32323',
-  accentSoft: '#fdecec',
-  onAccent: '#ffffff',
-  glow: 'rgba(211,35,35,0.06)',
-  radius: '0.75rem',
+  fontDisplay: FONT_DISPLAY,
+  fontBody: FONT_BODY,
+  bg: '#f5f4ef',
+  surface: '#fffefa',
+  raised: '#ecebe2',
+  text: '#020e0d',
+  muted: '#47514e',
+  line: 'rgba(2,14,13,0.12)',
+  accent: '#0b5d52',
+  accentSoft: '#f4e3cd',
+  onAccent: '#f5f4ef',
+  fill: '#e9a65c',
+  onFill: '#020e0d',
+  glow: 'rgba(233,166,92,0.16)',
+  radius: '1rem',
 } satisfies Omit<TaskTheme, 'kicker' | 'note'>
 
 export const taskThemes: Record<TaskKey, TaskTheme> = {
-  article: { ...base, kicker: 'Articles', note: 'In-depth reads, guides and stories worth your time.' },
-  listing: { ...base, kicker: 'Businesses', note: 'Find, compare and connect with local businesses.' },
-  classified: { ...base, kicker: 'Marketplace', note: 'Fresh offers and listings, ready to act on.' },
-  image: { ...base, kicker: 'Photos', note: 'A visual feed of standout images and galleries.' },
-  sbm: { ...base, kicker: 'Bookmarks', note: 'Curated resources and links worth saving.' },
-  pdf: { ...base, kicker: 'Documents', note: 'Downloadable guides, reports and references.' },
-  profile: { ...base, kicker: 'People', note: 'Discover creators, businesses and profiles.' },
+  article: { ...base, kicker: 'Reading room', note: 'In-depth reads, guides and references worth your time.' },
+  listing: { ...base, kicker: 'Directory', note: 'Find, compare and connect with useful entries.' },
+  classified: { ...base, kicker: 'Notice board', note: 'Fresh offers and postings, ready to act on.' },
+  image: { ...base, kicker: 'Gallery', note: 'A visual feed of standout images and collections.' },
+  sbm: { ...base, kicker: 'Collections', note: 'Curated links and resources worth saving.' },
+  // Public surface — the Reference Library.
+  pdf: { ...base, kicker: 'Reference Library', note: 'Downloadable guides, reports and reference documents.' },
+  // Direct-URL only — the display label appears solely on the profile detail page.
+  profile: { ...base, kicker: 'Contributor', note: 'The people behind the reference collection.' },
 }
 
 export function getTaskTheme(task: TaskKey): TaskTheme {
@@ -79,12 +87,14 @@ export function taskThemeStyle(task: TaskKey): CSSProperties {
     '--tk-accent': t.accent,
     '--tk-accent-soft': t.accentSoft,
     '--tk-on-accent': t.onAccent,
+    '--tk-fill': t.fill,
+    '--tk-on-fill': t.onFill,
     '--tk-glow': t.glow,
     '--tk-radius': t.radius,
-    // Re-point the shared article-body accent vars so post HTML (headings,
-    // links) inherits this task's accent instead of the global site accent.
+    // Article-body headings/links inherit the task's teal accent; keep the
+    // global amber fill intact for pill CTAs rendered inside detail pages.
     '--slot4-accent': t.accent,
-    '--slot4-accent-fill': t.accent,
+    '--slot4-accent-fill': t.fill,
     '--editable-font-display': t.fontDisplay,
     '--editable-font-body': t.fontBody,
     fontFamily: t.fontBody,

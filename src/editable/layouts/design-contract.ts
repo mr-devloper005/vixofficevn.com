@@ -1,39 +1,56 @@
 import type { CSSProperties } from 'react'
 
+/*
+  Design system — ensoro reference (warm editorial).
+
+  Palette: warm cream page base, near-black green ink, a deep-teal dark
+  contrast band, and a single warm-amber accent used for pill buttons and
+  highlights. Typography pairs Geist (bold geometric display, ultra-tight
+  leading) with Kanit (condensed humanist body). Buttons are full pills
+  (100px). Cards are flat with a 10px radius and a hairline ink border.
+
+  Everything downstream consumes these values through CSS variables, so a
+  palette or type change here cascades across the whole editable surface.
+*/
+
 export const editableRootStyle = {
-  // Yelp-style system: clean white surfaces, signature red accent, hairline
-  // gray borders, near-black text. Flat (no gradients), generous and premium.
-  '--slot4-page-bg': '#ffffff',
-  '--slot4-page-text': '#1a1a1a',
-  '--slot4-panel-bg': '#f7f7f7',
-  '--slot4-surface-bg': '#ffffff',
-  '--slot4-muted-text': '#6b6b6b',
-  '--slot4-soft-muted-text': '#999999',
-  '--slot4-accent': '#d32323',
-  '--slot4-accent-fill': '#d32323',
-  '--slot4-accent-soft': '#fdecec',
-  '--slot4-on-accent': '#ffffff',
-  '--slot4-dark-bg': '#1a1a1a',
-  '--slot4-dark-text': '#ffffff',
-  '--slot4-media-bg': '#eeeeee',
-  '--slot4-cream': '#ffffff',
-  '--slot4-warm': '#f7f7f7',
-  '--slot4-lavender': '#ffffff',
-  '--slot4-gray': '#f7f7f7',
+  // Warm cream base + green-black ink.
+  '--slot4-page-bg': '#f5f4ef',
+  '--slot4-page-text': '#020e0d',
+  '--slot4-panel-bg': '#ecebe2',
+  '--slot4-surface-bg': '#fffefa',
+  '--slot4-muted-text': '#47514e',
+  '--slot4-soft-muted-text': '#6b7370',
+  // Teal is the readable "ink accent" (eyebrows, icons, links, hairlines).
+  '--slot4-accent': '#0b5d52',
+  // Amber is the signature fill (pill buttons, highlights).
+  '--slot4-accent-fill': '#e9a65c',
+  '--slot4-accent-strong': '#b9762b',
+  '--slot4-accent-soft': '#f4e3cd',
+  // Amber is light, so ink sits on top of it.
+  '--slot4-on-accent': '#020e0d',
+  // Deep-teal dark band.
+  '--slot4-dark-bg': '#003d36',
+  '--slot4-dark-text': '#f5f4ef',
+  '--slot4-media-bg': '#e5e3d9',
+  '--slot4-cream': '#fffefa',
+  '--slot4-warm': '#efeee6',
+  '--slot4-lavender': '#f5f4ef',
+  '--slot4-gray': '#ecebe2',
   '--slot4-body-gradient': 'none',
-  '--editable-page-bg': '#ffffff',
-  '--editable-page-text': '#1a1a1a',
-  '--editable-container': '1500px',
-  '--editable-border': '#e6e6e6',
-  '--editable-nav-bg': '#ffffff',
-  '--editable-nav-text': '#1a1a1a',
-  '--editable-nav-active': '#d32323',
-  '--editable-nav-active-text': '#ffffff',
-  '--editable-cta-bg': '#d32323',
-  '--editable-cta-text': '#ffffff',
-  '--editable-search-bg': '#ffffff',
-  '--editable-footer-bg': '#ffffff',
-  '--editable-footer-text': '#1a1a1a',
+  '--editable-page-bg': '#f5f4ef',
+  '--editable-page-text': '#020e0d',
+  '--editable-container': '1120px',
+  '--editable-border': 'rgba(2,14,13,0.12)',
+  '--editable-nav-bg': '#f5f4ef',
+  '--editable-nav-text': '#020e0d',
+  '--editable-nav-active': '#0b5d52',
+  '--editable-nav-active-text': '#020e0d',
+  '--editable-cta-bg': '#e9a65c',
+  '--editable-cta-text': '#020e0d',
+  '--editable-search-bg': '#fffefa',
+  '--editable-footer-bg': '#003d36',
+  '--editable-footer-text': '#f5f4ef',
 } as CSSProperties
 
 export const editablePalette = {
@@ -58,47 +75,61 @@ export const editablePalette = {
   lavenderBg: 'bg-[var(--slot4-lavender)]',
   grayBg: 'bg-[var(--slot4-gray)]',
   border: 'border-[var(--editable-border)]',
-  darkBorder: 'border-white/10',
-  shadow: 'shadow-[0_1px_3px_rgba(0,0,0,0.08)]',
-  shadowStrong: 'shadow-[0_4px_18px_rgba(0,0,0,0.12)]',
-  overlay: 'bg-[linear-gradient(180deg,rgba(0,0,0,0.02),rgba(0,0,0,0.72))]',
+  darkBorder: 'border-white/12',
+  shadow: 'shadow-[0_1px_2px_rgba(2,14,13,0.05)]',
+  shadowStrong: 'shadow-[0_24px_60px_rgba(2,14,13,0.10)]',
+  overlay: 'bg-[linear-gradient(180deg,rgba(0,61,54,0.05),rgba(0,20,18,0.72))]',
 } as const
 
 export const editableDesignContract = {
   shell: {
     page: `min-h-screen ${editablePalette.pageBg} ${editablePalette.pageText}`,
-    section: 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8',
-    sectionY: 'py-14 sm:py-16 lg:py-20',
+    section: 'mx-auto w-full max-w-[var(--editable-container)] px-5 sm:px-8',
+    sectionY: 'py-16 sm:py-24 lg:py-28',
   },
   layout: {
-    safeGrid: 'grid gap-6 md:grid-cols-2 xl:grid-cols-3',
-    featureGrid: 'grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center',
+    safeGrid: 'grid gap-7 md:grid-cols-2 xl:grid-cols-3',
+    featureGrid: 'grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center',
     rail: 'flex snap-x gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-    minRailCard: 'w-[140px] shrink-0 snap-start sm:w-[160px]',
+    minRailCard: 'w-[150px] shrink-0 snap-start sm:w-[170px]',
   },
   type: {
-    eyebrow: 'text-xs font-semibold uppercase tracking-[0.28em] text-[var(--slot4-accent)]',
-    heroTitle: 'text-4xl font-semibold leading-[1.08] tracking-[-0.02em] sm:text-5xl lg:text-[3.25rem]',
-    sectionTitle: 'text-3xl font-semibold tracking-[-0.02em] sm:text-4xl',
-    body: 'text-base leading-relaxed',
+    // Geist labels, teal, tracked.
+    eyebrow: 'text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-[var(--slot4-accent)]',
+    // Huge, ultra-tight geometric display.
+    heroTitle: 'editable-display text-[clamp(2.75rem,7vw,5rem)] font-bold leading-[0.9] tracking-[-0.04em]',
+    sectionTitle: 'editable-display text-[clamp(2rem,4.6vw,3.5rem)] font-bold leading-[0.98] tracking-[-0.03em]',
+    body: 'text-[1.0625rem] leading-[1.6]',
+    // No serif in this reference — emphasis reads as a warm amber-ink highlight.
+    emphasis: 'text-[var(--slot4-accent-strong)]',
   },
   surface: {
-    card: `rounded-xl border ${editablePalette.border} ${editablePalette.surfaceBg} ${editablePalette.shadow}`,
-    soft: `rounded-xl border ${editablePalette.border} ${editablePalette.panelBg}`,
-    dark: `rounded-xl ${editablePalette.darkBg} ${editablePalette.darkText} ${editablePalette.shadowStrong}`,
+    card: `rounded-[0.625rem] border ${editablePalette.border} ${editablePalette.surfaceBg} ${editablePalette.shadow}`,
+    soft: `rounded-[0.625rem] border ${editablePalette.border} ${editablePalette.panelBg}`,
+    dark: `rounded-[1.5rem] ${editablePalette.darkBg} ${editablePalette.darkText} ${editablePalette.shadowStrong}`,
   },
   button: {
-    primary: `inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--slot4-accent-fill)] px-6 py-3 text-sm font-bold tracking-[0.01em] text-[var(--slot4-on-accent)] transition duration-200 hover:brightness-95 active:scale-[0.98]`,
-    secondary: `inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] px-6 py-3 text-sm font-bold tracking-[0.01em] text-[var(--slot4-page-text)] transition duration-200 hover:border-[var(--slot4-accent)] hover:text-[var(--slot4-accent)] active:scale-[0.98]`,
-    accent: `inline-flex items-center justify-center gap-2 rounded-lg ${editablePalette.accentBg} px-6 py-3 text-sm font-bold text-[var(--slot4-on-accent)] transition duration-200 hover:brightness-95 active:scale-[0.98]`,
+    // Full pill, amber fill, ink text.
+    primary: `inline-flex items-center justify-center gap-2 rounded-full bg-[var(--slot4-accent-fill)] px-7 py-3.5 text-sm font-semibold tracking-[0.01em] text-[var(--slot4-on-accent)] transition duration-300 hover:brightness-[1.04] active:scale-[0.98]`,
+    // Ink outline that fills on hover.
+    secondary: `inline-flex items-center justify-center gap-2 rounded-full border border-[color:rgba(2,14,13,0.28)] bg-transparent px-7 py-3.5 text-sm font-semibold tracking-[0.01em] text-[var(--slot4-page-text)] transition duration-300 hover:bg-[var(--slot4-page-text)] hover:text-[var(--slot4-page-bg)] active:scale-[0.98]`,
+    // Deep-teal fill.
+    accent: `inline-flex items-center justify-center gap-2 rounded-full bg-[var(--slot4-dark-bg)] px-7 py-3.5 text-sm font-semibold text-[var(--slot4-dark-text)] transition duration-300 hover:brightness-110 active:scale-[0.98]`,
+    ghost: `inline-flex items-center gap-2 text-sm font-semibold text-[var(--slot4-page-text)] transition duration-300 hover:text-[var(--slot4-accent)]`,
+  },
+  badge: {
+    pill: 'inline-flex items-center gap-2 rounded-full border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--slot4-muted-text)]',
+    accentPill: 'inline-flex items-center gap-2 rounded-full bg-[var(--slot4-accent-soft)] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--slot4-accent-strong)]',
   },
   media: {
-    frame: `relative overflow-hidden rounded-xl ${editablePalette.mediaBg}`,
-    ratio: 'aspect-[2/3]',
+    frame: `relative overflow-hidden rounded-[0.625rem] ${editablePalette.mediaBg}`,
+    frameFull: `relative overflow-hidden rounded-[1.25rem] ${editablePalette.mediaBg}`,
+    ratio: 'aspect-[4/3]',
   },
   motion: {
-    lift: 'transition duration-300 hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,0.14)]',
-    fade: 'transition duration-300 hover:opacity-80',
+    lift: 'transition duration-500 hover:-translate-y-1.5 hover:shadow-[0_28px_60px_rgba(2,14,13,0.12)]',
+    fade: 'transition duration-500 hover:opacity-80',
+    zoom: 'transition duration-700 group-hover:scale-[1.04]',
   },
 } as const
 
@@ -106,7 +137,7 @@ export const aiLayoutRules = [
   'Change the full site color palette in editableRootStyle first; all homepage sections consume those CSS variables.',
   'Keep page structure in src/editable/sections/HomeSections.tsx so AI can redesign the whole home experience in one file.',
   'Use wide readable grids; never create skinny columns for paragraphs or cards.',
-  'Use horizontal rails for dense post browsing, like the MysteryCoder reference layout.',
+  'Wrap section headers and grid items in EditableReveal with staggered index props.',
   'Keep dynamic post fetching intact; do not replace posts with mock arrays.',
   'Use postHref() for all post links so task-specific routes keep working.',
 ] as const
